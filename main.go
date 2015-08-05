@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/Sirupsen/logrus"
@@ -17,7 +18,11 @@ const (
 )
 
 var (
-	protos = []string{"tcp", "udp"}
+	beginPort int
+	endPort   int
+	protos    []string
+	timeout   time.Duration
+	wg        sync.WaitGroup
 )
 
 // preload initializes any global options and configuration
@@ -29,40 +34,43 @@ func preload(context *cli.Context) error {
 	return nil
 }
 
-func isReachable(proto, addr string, timeout time.Duration) bool {
+func checkReachable(proto, addr string) {
 	c, err := net.DialTimeout(proto, addr, timeout)
 	if err == nil {
 		c.Close()
-		return true
+		logrus.Infof("%s://%s is alive and reachable", proto, addr)
 	}
-	return false
 }
 
-func scanIP(ip net.IP, beginPort, endPort int, timeout time.Duration) {
-	logrus.Infof("scanning ip: %v", ip)
-
+func scanIP(ip string) {
 	for _, proto := range protos {
 		for port := beginPort; port <= endPort; port++ {
-			addr := fmt.Sprintf("%s:%d", ip.String(), port)
+			addr := fmt.Sprintf("%s:%d", ip, port)
 			logrus.Debugf("scanning addr: %s://%s", proto, addr)
-			if isReachable(proto, addr, timeout) {
-				logrus.Infof("%s://%s is alive and reachable", proto, addr)
-			}
+
+			checkReachable(proto, addr)
 		}
 	}
 }
 
-func scan(s string, beginPort, endPort int, timeout time.Duration) error {
+func scan(s string) {
 	ip, ipNet, err := net.ParseCIDR(s)
 	if err != nil {
 		ip = net.ParseIP(s)
-		scanIP(ip, beginPort, endPort, timeout)
-		return nil
+		scanIP(ip.String())
+		return
 	}
+
 	for ip := ip.Mask(ipNet.Mask); ipNet.Contains(ip); incIP(ip) {
-		scanIP(ip, beginPort, endPort, timeout)
+		wg.Add(1)
+		go func(ip string) {
+			defer wg.Done()
+
+			scanIP(ip)
+		}(ip.String())
 	}
-	return nil
+
+	wg.Wait()
 }
 
 func incIP(ip net.IP) {
@@ -119,8 +127,13 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "port, p",
-			Value: "0-1000",
+			Value: "1-1000",
 			Usage: "port range to check",
+		},
+		cli.StringFlag{
+			Name:  "proto",
+			Value: "tcp,udp",
+			Usage: "protocol/s to check",
 		},
 	}
 	app.Action = func(c *cli.Context) {
@@ -130,23 +143,22 @@ func main() {
 			return
 		}
 
-		timeout, err := time.ParseDuration(c.String("timeout"))
+		var err error
+		timeout, err = time.ParseDuration(c.String("timeout"))
 		if err != nil {
 			logrus.Error(err)
 			return
 		}
 
-		beginPort, endPort, err := parsePortRange(c.String("port"))
+		beginPort, endPort, err = parsePortRange(c.String("port"))
 		if err != nil {
 			logrus.Error(err)
 			return
 		}
 
-		err = scan(c.Args().First(), beginPort, endPort, timeout)
-		if err != nil {
-			logrus.Error(err)
-			return
-		}
+		protos = strings.Split(c.String("proto"), ",")
+
+		scan(c.Args().First())
 	}
 	app.Run(os.Args)
 }

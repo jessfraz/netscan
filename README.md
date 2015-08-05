@@ -23,7 +23,8 @@ COMMANDS:
 GLOBAL OPTIONS:
    --debug, -d      run in debug mode
    --timeout, -t "1s"   override timeout used for check
-   --port, -p "0-1000"  port range to check
+   --port, -p "1-1000"  port range to check
+   --proto "tcp,udp"    protocol/s to check
    --help, -h       show help
    --version, -v    print the version
 ```
