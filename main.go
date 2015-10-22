@@ -14,6 +14,7 @@ import (
 )
 
 const (
+	// VERSION is the command version
 	VERSION = "v0.1.0"
 )
 
