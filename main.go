@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	// VERSION is the command version
+	// VERSION is the command version.
 	VERSION = "v0.1.0"
 )
 
@@ -27,7 +27,7 @@ var (
 )
 
 // preload initializes any global options and configuration
-// before the main or sub commands are run
+// before the main or sub commands are run.
 func preload(context *cli.Context) error {
 	if context.GlobalBool("debug") {
 		logrus.SetLevel(logrus.DebugLevel)
