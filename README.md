@@ -1,6 +1,6 @@
 # netscan
 
-[![Circle CI](https://circleci.com/gh/jfrazelle/netscan.svg?style=svg)](https://circleci.com/gh/jfrazelle/netscan)
+[![Travis CI](https://travis-ci.org/jfrazelle/netscan.svg?branch=master)](https://travis-ci.org/jfrazelle/netscan)
 
 Scan a network for ports that are open on an ip/ip range, and
 ips that are in use on that network.
