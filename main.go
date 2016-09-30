@@ -112,7 +112,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "netscan"
 	app.Version = VERSION
-	app.Author = "@jfrazelle"
+	app.Author = "@jessfraz"
 	app.Email = "no-reply@butts.com"
 	app.Usage = "Scan network ips and ports."
 	app.Before = preload

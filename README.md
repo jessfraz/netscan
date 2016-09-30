@@ -1,6 +1,6 @@
 # netscan
 
-[![Travis CI](https://travis-ci.org/jfrazelle/netscan.svg?branch=master)](https://travis-ci.org/jfrazelle/netscan)
+[![Travis CI](https://travis-ci.org/jessfraz/netscan.svg?branch=master)](https://travis-ci.org/jessfraz/netscan)
 
 Scan a network for ports that are open on an ip/ip range, and
 ips that are in use on that network.
@@ -17,7 +17,7 @@ VERSION:
    v0.1.0
 
 AUTHOR(S):
-   @jfrazelle <no-reply@butts.com>
+   @jessfraz <no-reply@butts.com>
 
 COMMANDS:
    help, h  Shows a list of commands or help for one command
