@@ -9,11 +9,11 @@ ips that are in use on that network.
 
 #### Binaries
 
-- **darwin** [386](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-darwin-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-darwin-amd64)
-- **freebsd** [386](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-freebsd-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-freebsd-amd64)
-- **linux** [386](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-linux-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-linux-amd64) / [arm](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-linux-arm) / [arm64](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-linux-arm64)
-- **solaris** [amd64](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-solaris-amd64)
-- **windows** [386](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-windows-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.0.0/netscan-windows-amd64)
+- **darwin** [386](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-darwin-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-darwin-amd64)
+- **freebsd** [386](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-freebsd-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-freebsd-amd64)
+- **linux** [386](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-linux-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-linux-amd64) / [arm](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-linux-arm) / [arm64](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-linux-arm64)
+- **solaris** [amd64](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-solaris-amd64)
+- **windows** [386](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-windows-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.0.1/netscan-windows-amd64)
 
 #### Via Go
 
@@ -32,7 +32,7 @@ USAGE:
    netscan [global options] command [command options] [arguments...]
 
 VERSION:
-   version v0.0.0, build 30bb0f0
+   version v0.0.1, build 30bb0f0
 
 AUTHOR(S):
    @jessfraz <no-reply@butts.com>
