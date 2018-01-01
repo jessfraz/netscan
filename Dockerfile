@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM golang:alpine as builder
 MAINTAINER Jessica Frazelle <jess@linux.com>
 
 ENV PATH /go/bin:/usr/local/go/bin:$PATH
@@ -11,16 +11,22 @@ COPY . /go/src/github.com/jessfraz/netscan
 
 RUN set -x \
 	&& apk add --no-cache --virtual .build-deps \
-		go \
 		git \
 		gcc \
 		libc-dev \
 		libgcc \
+		make \
 	&& cd /go/src/github.com/jessfraz/netscan \
-	&& go build -o /usr/bin/netscan . \
+	&& make static \
+	&& mv netscan /usr/bin/netscan \
 	&& apk del .build-deps \
 	&& rm -rf /go \
 	&& echo "Build complete."
 
+FROM scratch
+
+COPY --from=builder /usr/bin/netscan /usr/bin/netscan
+COPY --from=builder /etc/ssl/certs/ /etc/ssl/certs
 
 ENTRYPOINT [ "netscan" ]
+CMD [ "--help" ]

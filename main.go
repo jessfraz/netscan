@@ -10,12 +10,8 @@ import (
 	"time"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/jessfraz/netscan/version"
 	"github.com/urfave/cli"
-)
-
-const (
-	// VERSION is the command version.
-	VERSION = "v0.1.0"
 )
 
 var (
@@ -111,7 +107,7 @@ func parsePortRange(ports string) (begin, end int, err error) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "netscan"
-	app.Version = VERSION
+	app.Version = fmt.Sprintf("version %s, build %s", version.VERSION, version.GITCOMMIT)
 	app.Author = "@jessfraz"
 	app.Email = "no-reply@butts.com"
 	app.Usage = "Scan network ips and ports."
