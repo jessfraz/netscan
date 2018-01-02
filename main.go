@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/jessfraz/netscan/version"
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
 
