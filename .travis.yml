@@ -1,62 +1,58 @@
----
-  language: go
-  sudo: false
-  notifications:
-    email: true
-  go:
-    - 1.x
-    - tip
-  matrix:
-    allow_failures:
-      - go: tip
-    fast_finish: true
-  install:
-    - go get github.com/golang/lint/golint
-    - go get honnef.co/go/tools/cmd/staticcheck
-  script:
-    - make all
-    - make cover
-    - make release
-  after_success:
-    - bash <(curl -s https://codecov.io/bash)
-  deploy:
-    provider: releases
-    api_key:
-      secure: "gUY6uVumFjGcp8CevbVXShJq/VXQ6g3fY/3163s/GFjvD2u+xXeA0cqWlbv+ZU097xeaD7s8ZOCYI7h7KVWijYGUmysiowA0g1viMcfrxz9XwsaK7MFM7VWTqpl3dV+nb5VJVTVl88cggRFJ+NGVZ53n4CYiOsAkcTKE0ZAE+iaX/OE5io3h9OH3OB3wHEJZlj4QAXu3HE6h71L9uEC2XbRhivnnniLLspxcHVbr/FobraXlgOhZgsK+NHdfAvQbDNw3AXbwiL3t871M7po7gshkix4c8rY7F70+NU4cwxuKOCUoj4TSjYmvImvBCcu7KGXkr5WrbMMafjvGtZ/HlrN4y+AvgTltp9+vXbzRR29mnFZAOSOcQZl1imrRErFGaOZha4jjsiRxQmHC07oVxWECQEyctfzlAiOEYW0T4FG1QzlwpuOV+juHlnZaakX0jpDPgJURXyHHMOw2a1DKUkQoUOAUZ+AGdA4S4iZo/Uk/hgSr2fULNDJ70I4hh4xJIOtMCRDBYOh63bh5jejzYVHLNH5E/RVdYzJBDOGK2cLkdfByrlbZfCy/pNCPU5kjhSyCboC0y1K71ev3W0a5Xaqk34sqo7vfTgttEPdMVZKMlpdTZ6pu+XO0N+9MYgoKO9M+YDPHui04jz8SnyWYpYlOFg49rzcuTdf99oHy/ic="
-    file:
-      - cross/netscan-linux-amd64.md5
-      - cross/netscan-windows-386.sha256
-      - cross/netscan-linux-arm
-      - cross/netscan-darwin-amd64.md5
-      - cross/netscan-darwin-amd64
-      - cross/netscan-solaris-amd64.md5
-      - cross/netscan-linux-arm64.sha256
-      - cross/netscan-linux-arm.sha256
-      - cross/netscan-linux-386.sha256
-      - cross/netscan-darwin-386.md5
-      - cross/netscan-windows-386.md5
-      - cross/netscan-freebsd-amd64.md5
-      - cross/netscan-linux-arm64.md5
-      - cross/netscan-linux-arm64
-      - cross/netscan-freebsd-amd64.sha256
-      - cross/netscan-freebsd-386.md5
-      - cross/netscan-linux-amd64.sha256
-      - cross/netscan-linux-386.md5
-      - cross/netscan-freebsd-386
-      - cross/netscan-solaris-amd64.sha256
-      - cross/netscan-windows-amd64
-      - cross/netscan-windows-amd64.md5
-      - cross/netscan-windows-amd64.sha256
-      - cross/netscan-linux-arm.md5
-      - cross/netscan-darwin-386.sha256
-      - cross/netscan-darwin-amd64.sha256
-      - cross/netscan-windows-386
-      - cross/netscan-solaris-amd64
-      - cross/netscan-darwin-386
-      - cross/netscan-linux-386
-      - cross/netscan-freebsd-amd64
-      - cross/netscan-freebsd-386.sha256
-      - cross/netscan-linux-amd64
-    skip_cleanup: true
-    on:
-      tags: true
+language: go
+sudo: false
+go:
+  - 1.10.x
+before_install:
+  - go get github.com/golang/lint/golint
+  - go get honnef.co/go/tools/cmd/staticcheck
+jobs:
+  include:
+    - script: make all
+    - stage: Run Test Coverage
+      script: make cover
+      after_success: bash <(curl -s https://codecov.io/bash)
+    - stage: Build Release
+      script:
+        - make release
+        - echo "Deploying to GitHub releases ..."
+      deploy:
+        provider: releases
+        file:
+          - cross/netscan-linux-amd64.md5
+          - cross/netscan-windows-386.sha256
+          - cross/netscan-linux-arm
+          - cross/netscan-darwin-amd64.md5
+          - cross/netscan-darwin-amd64
+          - cross/netscan-solaris-amd64.md5
+          - cross/netscan-linux-arm64.sha256
+          - cross/netscan-linux-arm.sha256
+          - cross/netscan-linux-386.sha256
+          - cross/netscan-darwin-386.md5
+          - cross/netscan-windows-386.md5
+          - cross/netscan-freebsd-amd64.md5
+          - cross/netscan-linux-arm64.md5
+          - cross/netscan-linux-arm64
+          - cross/netscan-freebsd-amd64.sha256
+          - cross/netscan-freebsd-386.md5
+          - cross/netscan-linux-amd64.sha256
+          - cross/netscan-linux-386.md5
+          - cross/netscan-freebsd-386
+          - cross/netscan-solaris-amd64.sha256
+          - cross/netscan-windows-amd64
+          - cross/netscan-windows-amd64.md5
+          - cross/netscan-windows-amd64.sha256
+          - cross/netscan-linux-arm.md5
+          - cross/netscan-darwin-386.sha256
+          - cross/netscan-darwin-amd64.sha256
+          - cross/netscan-windows-386
+          - cross/netscan-solaris-amd64
+          - cross/netscan-darwin-386
+          - cross/netscan-linux-386
+          - cross/netscan-freebsd-amd64
+          - cross/netscan-freebsd-386.sha256
+          - cross/netscan-linux-amd64
+        skip_cleanup: true
+        on:
+          tags: true
+        api_key:
+          secure: "gUY6uVumFjGcp8CevbVXShJq/VXQ6g3fY/3163s/GFjvD2u+xXeA0cqWlbv+ZU097xeaD7s8ZOCYI7h7KVWijYGUmysiowA0g1viMcfrxz9XwsaK7MFM7VWTqpl3dV+nb5VJVTVl88cggRFJ+NGVZ53n4CYiOsAkcTKE0ZAE+iaX/OE5io3h9OH3OB3wHEJZlj4QAXu3HE6h71L9uEC2XbRhivnnniLLspxcHVbr/FobraXlgOhZgsK+NHdfAvQbDNw3AXbwiL3t871M7po7gshkix4c8rY7F70+NU4cwxuKOCUoj4TSjYmvImvBCcu7KGXkr5WrbMMafjvGtZ/HlrN4y+AvgTltp9+vXbzRR29mnFZAOSOcQZl1imrRErFGaOZha4jjsiRxQmHC07oVxWECQEyctfzlAiOEYW0T4FG1QzlwpuOV+juHlnZaakX0jpDPgJURXyHHMOw2a1DKUkQoUOAUZ+AGdA4S4iZo/Uk/hgSr2fULNDJ70I4hh4xJIOtMCRDBYOh63bh5jejzYVHLNH5E/RVdYzJBDOGK2cLkdfByrlbZfCy/pNCPU5kjhSyCboC0y1K71ev3W0a5Xaqk34sqo7vfTgttEPdMVZKMlpdTZ6pu+XO0N+9MYgoKO9M+YDPHui04jz8SnyWYpYlOFg49rzcuTdf99oHy/ic="
