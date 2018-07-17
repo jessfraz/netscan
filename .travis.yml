@@ -18,39 +18,39 @@ jobs:
       deploy:
         provider: releases
         file:
-          - cross/netscan-linux-amd64.md5
-          - cross/netscan-windows-386.sha256
-          - cross/netscan-linux-arm
-          - cross/netscan-darwin-amd64.md5
           - cross/netscan-darwin-amd64
-          - cross/netscan-solaris-amd64.md5
-          - cross/netscan-linux-arm64.sha256
-          - cross/netscan-linux-arm.sha256
-          - cross/netscan-linux-386.sha256
+          - cross/netscan-darwin-amd64.md5
+          - cross/netscan-darwin-amd64.sha256
+          - cross/netscan-darwin-386
           - cross/netscan-darwin-386.md5
-          - cross/netscan-windows-386.md5
+          - cross/netscan-darwin-386.sha256
+          - cross/netscan-freebsd-amd64
           - cross/netscan-freebsd-amd64.md5
-          - cross/netscan-linux-arm64.md5
-          - cross/netscan-linux-arm64
           - cross/netscan-freebsd-amd64.sha256
-          - cross/netscan-freebsd-386.md5
-          - cross/netscan-linux-amd64.sha256
-          - cross/netscan-linux-386.md5
           - cross/netscan-freebsd-386
+          - cross/netscan-freebsd-386.md5
+          - cross/netscan-freebsd-386.sha256
+          - cross/netscan-linux-arm
+          - cross/netscan-linux-arm.md5
+          - cross/netscan-linux-arm.sha256
+          - cross/netscan-linux-arm64
+          - cross/netscan-linux-arm64.md5
+          - cross/netscan-linux-arm64.sha256
+          - cross/netscan-linux-amd64
+          - cross/netscan-linux-amd64.md5
+          - cross/netscan-linux-amd64.sha256
+          - cross/netscan-linux-386
+          - cross/netscan-linux-386.md5
+          - cross/netscan-linux-386.sha256
+          - cross/netscan-solaris-amd64
+          - cross/netscan-solaris-amd64.md5
           - cross/netscan-solaris-amd64.sha256
           - cross/netscan-windows-amd64
           - cross/netscan-windows-amd64.md5
           - cross/netscan-windows-amd64.sha256
-          - cross/netscan-linux-arm.md5
-          - cross/netscan-darwin-386.sha256
-          - cross/netscan-darwin-amd64.sha256
           - cross/netscan-windows-386
-          - cross/netscan-solaris-amd64
-          - cross/netscan-darwin-386
-          - cross/netscan-linux-386
-          - cross/netscan-freebsd-amd64
-          - cross/netscan-freebsd-386.sha256
-          - cross/netscan-linux-amd64
+          - cross/netscan-windows-386.md5
+          - cross/netscan-windows-386.sha256
         skip_cleanup: true
         on:
           tags: true

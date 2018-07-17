@@ -1,23 +1,26 @@
 # netscan
 
-[![Travis CI](https://travis-ci.org/jessfraz/netscan.svg?branch=master)](https://travis-ci.org/jessfraz/netscan)
+[![Travis CI](https://img.shields.io/travis/jessfraz/netscan.svg?style=for-the-badge)](https://travis-ci.org/jessfraz/netscan)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=for-the-badge)](https://godoc.org/github.com/jessfraz/netscan)
 
 Scan a network for ports that are open on an ip/ip range, and
 ips that are in use on that network.
+
+ * [Installation](README.md#installation)
+      * [Binaries](README.md#binaries)
+      * [Via Go](README.md#via-go)
+ * [Usage](README.md#usage)
+      * [Examples](README.md#examples)
 
 ## Installation
 
 #### Binaries
 
-- **darwin** [386](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-darwin-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-darwin-amd64)
-- **freebsd** [386](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-freebsd-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-freebsd-amd64)
-- **linux** [386](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-linux-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-linux-amd64) / [arm](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-linux-arm) / [arm64](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-linux-arm64)
-- **solaris** [amd64](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-solaris-amd64)
-- **windows** [386](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-windows-386) / [amd64](https://github.com/jessfraz/netscan/releases/download/v0.3.1/netscan-windows-amd64)
+For installation instructions from binaries please visit the [Releases Page](https://github.com/jessfraz/netscan/releases).
 
 #### Via Go
 
-```bash
+```console
 $ go get github.com/jessfraz/netscan
 ```
 
@@ -49,7 +52,7 @@ GLOBAL OPTIONS:
    --version, -v        print the version
 ```
 
-Examples:
+#### Examples
 
 ```console
 # for a cidr
