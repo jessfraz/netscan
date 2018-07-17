@@ -27,29 +27,20 @@ $ go get github.com/jessfraz/netscan
 ## Usage
 
 ```console
-$ netscan -h
-NAME:
-   netscan - Scan network ips and ports.
+netscan -  Scan network ips and ports.
 
-USAGE:
-   netscan [global options] command [command options] [arguments...]
+Usage: netscan <command>
 
-VERSION:
-   version v0.3.1, build 30bb0f0
+Flags:
 
-AUTHOR(S):
-   @jessfraz <no-reply@butts.com>
+  -d, --debug    enable debug logging (default: false)
+  -p, --ports    Ports to scan (ex. 80-443 or 80,443,8080 or 1-20,22,80-443) (default "80,443,8001,9001") 
+  --proto        protocol to use (can be set more than once) (default "tcp")
+  -t, --timeout  timeout for ping of port (default: 1s)
 
-COMMANDS:
-   help, h  Shows a list of commands or help for one command
+Commands:
 
-GLOBAL OPTIONS:
-   --debug, -d          run in debug mode
-   --timeout, -t "1s"   override timeout used for check
-   --port, -p "1-1000"  port range to check
-   --proto "tcp,udp"    protocol/s to check
-   --help, -h           show help
-   --version, -v        print the version
+  version  Show the version information.
 ```
 
 #### Examples
