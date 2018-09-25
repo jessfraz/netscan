@@ -1,0 +1,9 @@
+# github.com/genuinetools/pkg v0.0.0-20180717201740-54e648406b2d
+github.com/genuinetools/pkg/cli
+# github.com/sirupsen/logrus v1.0.5
+github.com/sirupsen/logrus
+# golang.org/x/crypto v0.0.0-20180621125126-a49355c7e3f8
+golang.org/x/crypto/ssh/terminal
+# golang.org/x/sys v0.0.0-20180909124046-d0be0721c37e
+golang.org/x/sys/unix
+golang.org/x/sys/windows
