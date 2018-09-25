@@ -23,7 +23,7 @@ RUN set -x \
 	&& rm -rf /go \
 	&& echo "Build complete."
 
-FROM scratch
+FROM alpine:latest
 
 COPY --from=builder /usr/bin/netscan /usr/bin/netscan
 COPY --from=builder /etc/ssl/certs/ /etc/ssl/certs
