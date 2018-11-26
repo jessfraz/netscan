@@ -19,13 +19,15 @@ import (
 )
 
 var (
-	timeout   time.Duration
-	ports     intSlice
-	protocols stringSlice
+	timeout         time.Duration
+	ports           intSlice
+	protocols       stringSlice
+	parallelRunners int
 
-	defaultProtocols = stringSlice{"tcp"}
-	defaultPorts     = intSlice{80, 443, 8001, 9001}
-	originalPorts    string
+	defaultProtocols       = stringSlice{"tcp"}
+	defaultPorts           = intSlice{80, 443, 8001, 9001}
+	defaultParallelRunners = 100
+	originalPorts          string
 
 	debug bool
 )
@@ -121,6 +123,9 @@ func main() {
 	p.FlagSet.Var(&ports, "ports", fmt.Sprintf("Ports to scan (ex. 80-443 or 80,443,8080 or 1-20,22,80-443) (default %q)", defaultPorts.String()))
 	p.FlagSet.Var(&ports, "p", fmt.Sprintf("Ports to scan (ex. 80-443 or 80,443,8080 or 1-20,22,80-443) (default %q)", defaultPorts.String()))
 
+	p.FlagSet.IntVar(&parallelRunners, "r", defaultParallelRunners, fmt.Sprintf("Maximum amount of parallel runners (default %q)", defaultParallelRunners))
+	p.FlagSet.IntVar(&parallelRunners, "runners", defaultParallelRunners, fmt.Sprintf("Maximum amount of parallel runners (default %q)", defaultParallelRunners))
+
 	p.FlagSet.Var(&protocols, "proto", `protocol to use (can be set more than once) (default "tcp")`)
 
 	p.FlagSet.BoolVar(&debug, "d", false, "enable debug logging")
@@ -164,7 +169,7 @@ func main() {
 
 		log.Infof("Scanning on %s using protocols (%s) over ports %s", args[0], strings.Join(protocols, ","), ports.String())
 
-		scan := scanner.NewScanner(scanner.WithTimeout(timeout), scanner.WithProtocols(protocols))
+		scan := scanner.NewScanner(scanner.WithTimeout(timeout), scanner.WithProtocols(protocols), scanner.WithParallelRunners(parallelRunners))
 
 		var err error
 		if !strings.Contains(args[0], "/") {
