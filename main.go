@@ -5,16 +5,15 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"net"
 	"os"
 	"os/signal"
 	"strconv"
 	"strings"
-	"sync"
 	"syscall"
 	"time"
 
 	"github.com/genuinetools/pkg/cli"
+	"github.com/jessfraz/netscan/pkg/scanner"
 	"github.com/jessfraz/netscan/version"
 	"github.com/sirupsen/logrus"
 )
@@ -103,6 +102,8 @@ func (i *intSlice) Set(value string) error {
 }
 
 func main() {
+	log := logrus.New()
+
 	// Create a new cli program.
 	p := cli.NewProgram()
 	p.Name = "netscan"
@@ -129,7 +130,7 @@ func main() {
 	p.Before = func(ctx context.Context) error {
 		// Set the log level.
 		if debug {
-			logrus.SetLevel(logrus.DebugLevel)
+			log.SetLevel(logrus.DebugLevel)
 		}
 
 		if p.FlagSet.NArg() < 1 {
@@ -156,68 +157,31 @@ func main() {
 		signal.Notify(c, syscall.SIGTERM)
 		go func() {
 			for sig := range c {
-				logrus.Infof("Received %s, exiting.", sig.String())
+				log.Infof("Received %s, exiting.", sig.String())
 				os.Exit(0)
 			}
 		}()
 
-		logrus.Infof("Scanning on %s using protocols (%s) over ports %s", args[0], strings.Join(protocols, ","), ports.String())
+		log.Infof("Scanning on %s using protocols (%s) over ports %s", args[0], strings.Join(protocols, ","), ports.String())
 
-		var (
-			ip    net.IP
-			ipnet *net.IPNet
-			err   error
-		)
+		scan := scanner.NewScanner(scanner.WithTimeout(timeout), scanner.WithProtocols(protocols))
+
+		var err error
 		if !strings.Contains(args[0], "/") {
-			// We got an ip not a CIDR range.
-			ip = net.ParseIP(args[0])
-			scanIP(ip)
-			return nil
+			err = scan.AddIP(args[0])
+		} else {
+			err = scan.AddCIDR(args[0])
 		}
-
-		ip, ipnet, err = net.ParseCIDR(args[0])
 		if err != nil {
 			return err
 		}
 
-		for ip := ip.Mask(ipnet.Mask); ipnet.Contains(ip); inc(ip) {
-			scanIP(ip)
-		}
+		scan.SetPorts(ports)
+		scan.ScanToLogger(log)
 
 		return nil
 	}
 
 	// Run our program.
 	p.Run()
-}
-
-func scanIP(ip net.IP) {
-	var wg sync.WaitGroup
-	for _, port := range ports {
-		for _, proto := range protocols {
-			addr := fmt.Sprintf("%s:%d", ip, port)
-			logrus.Debugf("Scannng %s://%s", proto, addr)
-
-			wg.Add(1)
-			go func(proto, addr string) {
-				defer wg.Done()
-
-				c, err := net.DialTimeout(proto, addr, timeout)
-				if err == nil {
-					c.Close()
-					logrus.Infof("%s://%s is alive and reachable", proto, addr)
-				}
-			}(proto, addr)
-		}
-	}
-	wg.Wait()
-}
-
-func inc(ip net.IP) {
-	for j := len(ip) - 1; j >= 0; j-- {
-		ip[j]++
-		if ip[j] > 0 {
-			break
-		}
-	}
 }
