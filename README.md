@@ -10,6 +10,12 @@ ips that are in use on that network.
 
 <!-- toc -->
 
+- [Installation](#installation)
+    + [Binaries](#binaries)
+    + [Via Go](#via-go)
+- [Usage](#usage)
+    + [Examples](#examples)
+
 <!-- tocstop -->
 
 ## Installation
