@@ -6,11 +6,11 @@
 Scan a network for ports that are open on an ip/ip range, and
 ips that are in use on that network.
 
- * [Installation](README.md#installation)
-      * [Binaries](README.md#binaries)
-      * [Via Go](README.md#via-go)
- * [Usage](README.md#usage)
-      * [Examples](README.md#examples)
+**Table of Contents**
+
+<!-- toc -->
+
+<!-- tocstop -->
 
 ## Installation
 
