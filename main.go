@@ -19,13 +19,15 @@ import (
 )
 
 var (
-	timeout   time.Duration
-	ports     intSlice
-	protocols stringSlice
+	timeout         time.Duration
+	ports           intSlice
+	protocols       stringSlice
+	parallelRunners int
 
-	defaultProtocols = stringSlice{"tcp"}
-	defaultPorts     = intSlice{80, 443, 8001, 9001}
-	originalPorts    string
+	defaultProtocols       = stringSlice{"tcp"}
+	defaultPorts           = intSlice{80, 443, 8001, 9001}
+	defaultParallelRunners = 100
+	originalPorts          string
 
 	debug bool
 )
@@ -81,7 +83,7 @@ func (i *intSlice) Set(value string) error {
 				return err
 			}
 			if begin > end {
-				return fmt.Errorf("End port can not be greater than the beginning port: %d > %d", end, begin)
+				return fmt.Errorf("end port can not be greater than the beginning port: %d > %d", end, begin)
 			}
 			for port := begin; port <= end; port++ {
 				*i = append(*i, port)
@@ -121,6 +123,9 @@ func main() {
 	p.FlagSet.Var(&ports, "ports", fmt.Sprintf("Ports to scan (ex. 80-443 or 80,443,8080 or 1-20,22,80-443) (default %q)", defaultPorts.String()))
 	p.FlagSet.Var(&ports, "p", fmt.Sprintf("Ports to scan (ex. 80-443 or 80,443,8080 or 1-20,22,80-443) (default %q)", defaultPorts.String()))
 
+	p.FlagSet.IntVar(&parallelRunners, "r", defaultParallelRunners, fmt.Sprintf("Maximum amount of parallel runners (default %q)", defaultParallelRunners))
+	p.FlagSet.IntVar(&parallelRunners, "runners", defaultParallelRunners, fmt.Sprintf("Maximum amount of parallel runners (default %q)", defaultParallelRunners))
+
 	p.FlagSet.Var(&protocols, "proto", `protocol to use (can be set more than once) (default "tcp")`)
 
 	p.FlagSet.BoolVar(&debug, "d", false, "enable debug logging")
@@ -134,7 +139,7 @@ func main() {
 		}
 
 		if p.FlagSet.NArg() < 1 {
-			return errors.New("Pass an ip or cidr, ex: 192.168.104.1/24")
+			return errors.New("pass an ip or cidr, ex: 192.168.104.1/24")
 		}
 
 		// Set the default ports.
@@ -164,7 +169,7 @@ func main() {
 
 		log.Infof("Scanning on %s using protocols (%s) over ports %s", args[0], strings.Join(protocols, ","), ports.String())
 
-		scan := scanner.NewScanner(scanner.WithTimeout(timeout), scanner.WithProtocols(protocols))
+		scan := scanner.NewScanner(scanner.WithTimeout(timeout), scanner.WithProtocols(protocols), scanner.WithParallelRunners(parallelRunners))
 
 		var err error
 		if !strings.Contains(args[0], "/") {

@@ -9,10 +9,11 @@ import (
 
 // Scanner allows to port scan multiple IPs for multiple ports
 type Scanner struct {
-	ips       []net.IP
-	timeout   time.Duration
-	ports     []int
-	protocols []string
+	ips         []net.IP
+	timeout     time.Duration
+	ports       []int
+	protocols   []string
+	maxParallel int
 }
 
 // AddressSet is a set of the IP port and protocol of a responding service
@@ -25,9 +26,10 @@ type AddressSet struct {
 // NewScanner gives a new Scanner instance
 func NewScanner(options ...func(*Scanner)) *Scanner {
 	scanner := Scanner{
-		timeout:   time.Second,
-		ports:     []int{80, 443, 8001, 9001},
-		protocols: []string{"tcp"},
+		timeout:     time.Second,
+		ports:       []int{80, 443, 8001, 9001},
+		protocols:   []string{"tcp"},
+		maxParallel: 100,
 	}
 
 	for _, option := range options {
@@ -55,6 +57,13 @@ func WithProtocols(protocols []string) func(*Scanner) {
 func WithPorts(ports []int) func(*Scanner) {
 	return func(s *Scanner) {
 		s.SetPorts(ports)
+	}
+}
+
+// WithParallelRunners is used as an option in NewScanner to the maximum number af parallel probes to use
+func WithParallelRunners(max int) func(*Scanner) {
+	return func(s *Scanner) {
+		s.maxParallel = max
 	}
 }
 
@@ -90,6 +99,7 @@ func (s *Scanner) SetPorts(ports []int) {
 
 // Scan performs a network scan and returns the responding addressses
 func (s *Scanner) Scan() []AddressSet {
+	guard := make(chan struct{}, s.maxParallel)
 	results := []AddressSet{}
 	resultsMutex := sync.Mutex{}
 	var wg sync.WaitGroup
@@ -102,7 +112,9 @@ func (s *Scanner) Scan() []AddressSet {
 				go func(proto, addr string) {
 					defer wg.Done()
 
+					guard <- struct{}{}
 					c, err := net.DialTimeout(proto, addr, s.timeout)
+					<-guard
 					if err == nil {
 						c.Close()
 						resultsMutex.Lock()
@@ -129,18 +141,21 @@ type logger interface {
 
 // ScanToLogger perforn a scan and outputs the results to a logger interface
 func (s *Scanner) ScanToLogger(log logger) {
+	guard := make(chan struct{}, s.maxParallel)
 	var wg sync.WaitGroup
 	for _, ip := range s.ips {
 		for _, port := range s.ports {
 			for _, proto := range s.protocols {
 				addr := fmt.Sprintf("%s:%d", ip, port)
-				log.Debugf("Scannng %s://%s", proto, addr)
 
 				wg.Add(1)
 				go func(proto, addr string) {
 					defer wg.Done()
 
+					guard <- struct{}{}
+					log.Debugf("Scanning %s://%s", proto, addr)
 					c, err := net.DialTimeout(proto, addr, s.timeout)
+					<-guard
 					if err == nil {
 						c.Close()
 						log.Infof("%s://%s is alive and reachable", proto, addr)
