@@ -83,7 +83,7 @@ func (i *intSlice) Set(value string) error {
 				return err
 			}
 			if begin > end {
-				return fmt.Errorf("End port can not be greater than the beginning port: %d > %d", end, begin)
+				return fmt.Errorf("end port can not be greater than the beginning port: %d > %d", end, begin)
 			}
 			for port := begin; port <= end; port++ {
 				*i = append(*i, port)
@@ -139,7 +139,7 @@ func main() {
 		}
 
 		if p.FlagSet.NArg() < 1 {
-			return errors.New("Pass an ip or cidr, ex: 192.168.104.1/24")
+			return errors.New("pass an ip or cidr, ex: 192.168.104.1/24")
 		}
 
 		// Set the default ports.
