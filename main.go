@@ -15,6 +15,7 @@ import (
 	"github.com/genuinetools/pkg/cli"
 	"github.com/jessfraz/netscan/pkg/scanner"
 	"github.com/jessfraz/netscan/version"
+	"github.com/mattn/go-colorable"
 	"github.com/sirupsen/logrus"
 )
 
@@ -104,6 +105,9 @@ func (i *intSlice) Set(value string) error {
 }
 
 func main() {
+	logrus.SetFormatter(&logrus.TextFormatter{ForceColors: true})
+	logrus.SetOutput(colorable.NewColorableStdout())
+
 	log := logrus.New()
 
 	// Create a new cli program.
