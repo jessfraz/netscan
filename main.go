@@ -27,7 +27,6 @@ var (
 	defaultProtocols       = stringSlice{"tcp"}
 	defaultPorts           = intSlice{80, 443, 8001, 9001}
 	defaultParallelRunners = 100
-	originalPorts          string
 
 	debug bool
 )
@@ -60,8 +59,6 @@ func (i *intSlice) String() (out string) {
 }
 
 func (i *intSlice) Set(value string) error {
-	originalPorts = value
-
 	// Set the default if nothing was given.
 	if len(value) <= 0 {
 		*i = defaultPorts
