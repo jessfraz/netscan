@@ -1,5 +1,7 @@
 module github.com/jessfraz/netscan
 
+go 1.14
+
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/genuinetools/pkg v0.0.0-20180717201740-54e648406b2d
