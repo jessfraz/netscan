@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [netscan](#netscan)
+  - [Installation](#installation)
+      - [Binaries](#binaries)
+      - [Via Go](#via-go)
+  - [Usage](#usage)
+      - [Examples](#examples)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # netscan
 
 [![make-all](https://github.com/jessfraz/netscan/workflows/make%20all/badge.svg)](https://github.com/jessfraz/netscan/actions?query=workflow%3A%22make+all%22)
