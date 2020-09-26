@@ -109,7 +109,7 @@ func (s *Scanner) Scan() []AddressSet {
 				addr := fmt.Sprintf("%s:%d", ip, port)
 
 				wg.Add(1)
-				go func(proto, addr string) {
+				go func(proto, addr string, ip net.IP, port int) {
 					defer wg.Done()
 
 					guard <- struct{}{}
@@ -125,7 +125,7 @@ func (s *Scanner) Scan() []AddressSet {
 						})
 						resultsMutex.Unlock()
 					}
-				}(proto, addr)
+				}(proto, addr, ip, port)
 			}
 		}
 	}
