@@ -106,15 +106,13 @@ func (s *Scanner) Scan() []AddressSet {
 	for _, ip := range s.ips {
 		for _, port := range s.ports {
 			for _, proto := range s.protocols {
-				addr := fmt.Sprintf("%s:%d", ip, port)
-
+				guard <- struct{}{}
 				wg.Add(1)
-				go func(proto, addr string) {
+				go func(ip net.IP, port int, proto string) {
+					addr := fmt.Sprintf("%s:%d", ip, port)
 					defer wg.Done()
 
-					guard <- struct{}{}
 					c, err := net.DialTimeout(proto, addr, s.timeout)
-					<-guard
 					if err == nil {
 						c.Close()
 						resultsMutex.Lock()
@@ -125,7 +123,8 @@ func (s *Scanner) Scan() []AddressSet {
 						})
 						resultsMutex.Unlock()
 					}
-				}(proto, addr)
+					<-guard
+				}(ip, port, proto)
 			}
 		}
 	}
