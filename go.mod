@@ -1,4 +1,4 @@
-module github.com/bizmate-oss/netscan
+module github.com/jessfraz/netscan
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
